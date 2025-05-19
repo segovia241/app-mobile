@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Clase de utilidad para elementos visibles solo para lectores de pantalla */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Clase para mejorar el indicador de foco */
+  .focus-visible-outline:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+@layer base {
+  :root {
+    /* Colores base con mejor contraste */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+
+    /* Colores primarios con mejor contraste */
+    --primary: 220 70% 40%; /* Azul más oscuro para mejor contraste */
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 0 0% 93%;
+    --secondary-foreground: 0 0% 9%;
+
+    --muted: 0 0% 93%;
+    --muted-foreground: 0 0% 35%; /* Más oscuro para mejor contraste */
+
+    --accent: 220 70% 95%;
+    --accent-foreground: 220 70% 30%;
+
+    --destructive: 0 84.2% 50%; /* Rojo más oscuro para mejor contraste */
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 80%; /* Más oscuro para mejor contraste */
+    --input: 0 0% 80%;
+    --ring: 220 70% 40%;
+    --focus-ring: 220 70% 40%;
+
+    /* Colores para gráficos con mejor contraste */
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 10%; /* Más claro que negro puro para reducir el contraste extremo */
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 220 70% 60%; /* Azul más claro para mejor contraste en modo oscuro */
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 75%; /* Más claro para mejor contraste */
+
+    --accent: 220 70% 25%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 25%; /* Más claro para mejor contraste */
+    --input: 0 0% 25%;
+    --ring: 220 70% 60%;
+    --focus-ring: 220 70% 60%;
+
+    /* Colores para gráficos con mejor contraste en modo oscuro */
+    --chart-1: 220 70% 60%;
+    --chart-2: 160 60% 55%;
+    --chart-3: 30 80% 65%;
+    --chart-4: 280 65% 70%;
+    --chart-5: 340 75% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Mejora de la jerarquía de encabezados para accesibilidad */
+  h1 {
+    @apply text-2xl font-bold mb-4;
+  }
+
+  h2 {
+    @apply text-xl font-semibold mb-3;
+  }
+
+  h3 {
+    @apply text-lg font-medium mb-2;
+  }
+
+  /* Mejora del contraste para enlaces */
+  a:not([class]) {
+    @apply text-primary underline underline-offset-4 hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  }
+
+  /* Mejora del contraste para elementos interactivos */
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  }
+}

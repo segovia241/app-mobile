@@ -1,0 +1,10 @@
+// Exportar todas las funciones de la API desde un único punto
+export * from "./materias"
+export * from "./aulas"
+export * from "./horarios"
+export * from "./estudiantes"
+export * from "./profesores"
+export * from "./inscripciones"
+export * from "./asistencia"
+export * from "./periodos"
+export * from "./usuarios"

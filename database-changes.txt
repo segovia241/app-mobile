@@ -1,0 +1,55 @@
+-- Nueva tabla para cursos (combinación de profesor, materia, horario y días)
+CREATE TABLE cursos (
+  id SERIAL PRIMARY KEY,
+  tutor_id INTEGER NOT NULL REFERENCES profesores(id) ON DELETE CASCADE,
+  subject_id INTEGER NOT NULL REFERENCES materias(id) ON DELETE CASCADE,
+  horario_inicio TIME NOT NULL,
+  horario_fin TIME NOT NULL,
+  dias_semana TEXT[] NOT NULL, -- Array de días de la semana: ['Lunes', 'Miércoles', 'Viernes']
+  aula_id INTEGER REFERENCES aulas(id),
+  periodo_id INTEGER REFERENCES periodos_academicos(id),
+  capacidad_maxima INTEGER DEFAULT 30,
+  estado VARCHAR(20) DEFAULT 'activo' CHECK (estado IN ('activo', 'inactivo', 'cancelado', 'finalizado')),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(tutor_id, subject_id, horario_inicio, horario_fin, periodo_id)
+);
+
+-- Tabla para inscripciones de estudiantes a cursos específicos
+CREATE TABLE inscripciones_cursos (
+  id SERIAL PRIMARY KEY,
+  student_id INTEGER NOT NULL REFERENCES estudiantes(id) ON DELETE CASCADE,
+  curso_id INTEGER NOT NULL REFERENCES cursos(id) ON DELETE CASCADE,
+  fecha_inscripcion DATE NOT NULL DEFAULT CURRENT_DATE,
+  estado VARCHAR(20) DEFAULT 'activo' CHECK (estado IN ('activo', 'inactivo', 'aprobado', 'reprobado')),
+  calificacion_final NUMERIC(5,2),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(student_id, curso_id)
+);
+
+-- Índices para mejorar el rendimiento
+CREATE INDEX idx_cursos_tutor ON cursos(tutor_id);
+CREATE INDEX idx_cursos_subject ON cursos(subject_id);
+CREATE INDEX idx_cursos_periodo ON cursos(periodo_id);
+CREATE INDEX idx_inscripciones_cursos_student ON inscripciones_cursos(student_id);
+CREATE INDEX idx_inscripciones_cursos_curso ON inscripciones_cursos(curso_id);
+
+-- Trigger para actualizar el campo updated_at
+CREATE OR REPLACE FUNCTION update_modified_column()
+RETURNS TRIGGER AS $$
+BEGIN
+   NEW.updated_at = now(); 
+   RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER update_cursos_modtime
+BEFORE UPDATE ON cursos
+FOR EACH ROW
+EXECUTE PROCEDURE update_modified_column();
+
+CREATE TRIGGER update_inscripciones_cursos_modtime
+BEFORE UPDATE ON inscripciones_cursos
+FOR EACH ROW
+EXECUTE PROCEDURE update_modified_column();
